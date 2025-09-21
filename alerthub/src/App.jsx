@@ -2,6 +2,7 @@
 import LiveMap from './LiveMap.jsx'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Student from './pages/Student.jsx'
+import StudentDashboard from './pages/StudentDashboard.js'
 import Teacher from './pages/Teacher.jsx'
 import ParentGuardian from './pages/ParentGuardian.jsx'
 import InstitutionTeams from './pages/InstitutionTeams.jsx'
@@ -19,11 +20,18 @@ function App() {
         <Route path="/map" element={<LiveMap />} />
   <Route path="/register" element={<Register />} />
   <Route path="/login" element={<Login />} />
-        <Route path="/student" element={<Student />} />
-        <Route path="/teacher" element={<Teacher />} />
-        <Route path="/parent" element={<ParentGuardian />} />
-        <Route path="/institution" element={<InstitutionTeams />} />
-        <Route path="/authority" element={<Authority />} />
+  {/* Existing detail routes */}
+  <Route path="/student" element={<Student />} />
+  <Route path="/teacher" element={<Teacher />} />
+  <Route path="/parent" element={<ParentGuardian />} />
+  <Route path="/institution" element={<InstitutionTeams />} />
+  <Route path="/authority" element={<Authority />} />
+  {/* New dashboard aliases for role-based redirect */}
+  <Route path="/student-dashboard" element={<StudentDashboard />} />
+  <Route path="/teacher-dashboard" element={<Teacher />} />
+  <Route path="/parent-dashboard" element={<ParentGuardian />} />
+  <Route path="/institution-dashboard" element={<InstitutionTeams />} />
+  <Route path="/authority-dashboard" element={<Authority />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

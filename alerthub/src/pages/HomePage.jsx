@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react'
 import LiveMap from '../LiveMap'
 import { Link, NavLink } from 'react-router-dom'
@@ -19,7 +18,7 @@ function Navbar() {
 
   function chooseLang(code) {
     setLang(code)
-    try { localStorage.setItem('lang', code) } catch {}
+    try { localStorage.setItem('lang', code) } catch { void 0 }
   }
 
   const linkBase = 'rounded-full px-3 py-1.5 text-sm transition-colors'
@@ -31,7 +30,7 @@ function Navbar() {
         const y = el.getBoundingClientRect().top + window.pageYOffset - 80
         window.scrollTo({ top: y, behavior: 'smooth' })
       }
-    } catch {}
+    } catch { void 0 }
   }
 
   return (
@@ -58,6 +57,15 @@ function Navbar() {
               }
             >
               Home
+            </NavLink>
+            {/* New: direct link to Student Dashboard */}
+            <NavLink
+              to="/student-dashboard"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? 'bg-white/70 text-neutral-900 shadow dark:bg-neutral-800/80 dark:text-white' : 'text-neutral-700 hover:text-brand dark:text-neutral-200'}`
+              }
+            >
+              Dashboard
             </NavLink>
             <button
               type="button"
@@ -135,6 +143,10 @@ function Navbar() {
           <div className="mt-2 rounded-2xl border border-white/20 bg-white/80 p-3 shadow-lg backdrop-blur dark:border-white/10 dark:bg-neutral-900/80 md:hidden">
             <div className="flex flex-col gap-2">
               <NavLink to="/" end className={({ isActive }) => `${linkBase} ${isActive ? 'bg-white text-neutral-900 dark:bg-neutral-800 dark:text-white' : ''}`} onClick={() => setMenuOpen(false)}>Home</NavLink>
+              {/* New: Dashboard link in mobile menu */}
+              <Link to="/student-dashboard" className={linkBase} onClick={() => setMenuOpen(false)}>
+                Dashboard
+              </Link>
               <button className={`${linkBase}`} onClick={() => { scrollToSection('disasters'); setMenuOpen(false) }}>About</button>
               <button className={`${linkBase}`} onClick={() => { scrollToSection('evolution'); setMenuOpen(false) }}>Evolution</button>
               <button className={`${linkBase}`} onClick={() => { scrollToSection('process'); setMenuOpen(false) }}>Process</button>
