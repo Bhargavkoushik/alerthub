@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
 import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, Link } from 'react-router-dom'
-import { loginLocal } from '../lib/localAuth'
+// Auth temporarily skipped for demo (no DB yet)
 
 const roles = ['student','teacher','parent','institution','authority']
 
@@ -27,22 +26,25 @@ export default function Login() {
   async function submit(e) {
     e.preventDefault()
     setError('')
-    let payload = { role, password: otpMode ? undefined : password, verificationCode: role === 'authority' ? verificationCode : undefined }
-    if (idMeta.key === 'username') payload.username = identity.username
-    else if (idMeta.key === 'email') payload.email = identity.email
-    else {
-      const id = identity.email || identity.phone
-      if (id?.includes('@')) payload.email = id; else payload.phone = id
+    // Skip actual authentication for now and just route based on selected role
+    const pathByRole = {
+      student: '/student-dashboard',
+      teacher: '/teacher-dashboard',
+      parent: '/parent-dashboard',
+      institution: '/institution-dashboard',
+      authority: '/authority-dashboard',
     }
+    // Persist a display name from login inputs so dashboards can greet correctly
     try {
-  loginLocal(payload)
-      toast.success('Login successful')
-      const pathByRole = { student: '/student', teacher: '/teacher', parent: '/parent', institution: '/institution', authority: '/authority' }
-      nav(pathByRole[role] || '/')
-    } catch (err) {
-      console.error('Login (local) failed:', err)
-      setError(err?.message || 'Invalid credentials')
-    }
+      const nameFromUsername = identity.username?.trim()
+      const nameFromEmail = identity.email?.trim()?.split('@')[0]
+      const nameFromPhone = identity.phone?.trim()
+      const displayName = (nameFromUsername || nameFromEmail || nameFromPhone || 'varun')
+      localStorage.setItem('currentName', displayName)
+      localStorage.setItem('currentRole', role)
+  } catch { /* no-op */ }
+    toast.success('Redirecting to your dashboard (demo)')
+    nav(pathByRole[role] || '/')
   }
 
   return (

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { registerLocal } from '../lib/localAuth'
