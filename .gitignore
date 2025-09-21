@@ -1,0 +1,52 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+**/node_modules/
+
+# Env
+.env
+**/.env
+.env.local
+**/.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# Build outputs
+/dist
+**/dist
+build/
+**/build
+.tmp/
+.temp/
+
+# Vite/Cache
+vite.config.ts.timestamp-* 
+.cache/
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+**/coverage/
+
+# Lockfiles (optional to ignore globally; keep if repo policy)
+# package-lock.json
+# pnpm-lock.yaml
+# yarn.lock

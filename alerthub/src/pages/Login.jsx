@@ -2,7 +2,7 @@
 import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, Link } from 'react-router-dom'
-import { loginLocal } from '../lib/localAuth'
+import { loginUser } from '../lib/api'
 
 const roles = ['student','teacher','parent','institution','authority']
 
@@ -27,6 +27,15 @@ export default function Login() {
   async function submit(e) {
     e.preventDefault()
     setError('')
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const phoneRe = /^(?:\+91)?[6-9]\d{9}$/
+    const userRe = /^[a-zA-Z0-9_]{3,20}$/
+
+    if (otpMode) {
+      toast.error('OTP login not supported in this demo')
+      return
+    }
+
     let payload = { role, password: otpMode ? undefined : password, verificationCode: role === 'authority' ? verificationCode : undefined }
     if (idMeta.key === 'username') payload.username = identity.username
     else if (idMeta.key === 'email') payload.email = identity.email
@@ -34,13 +43,24 @@ export default function Login() {
       const id = identity.email || identity.phone
       if (id?.includes('@')) payload.email = id; else payload.phone = id
     }
+    // Validate identifier + password
+    if (idMeta.key === 'username') {
+      if (!payload.username?.trim() || !userRe.test(payload.username.trim())) { setError('Enter a valid username'); return }
+    } else if (idMeta.key === 'email') {
+      if (!payload.email?.trim() || !emailRe.test(payload.email.trim())) { setError('Enter a valid email'); return }
+    } else {
+      const v = (payload.email || payload.phone || '').trim()
+      const ok = v.includes('@') ? emailRe.test(v) : phoneRe.test(v)
+      if (!ok) { setError('Enter a valid email or Indian phone'); return }
+    }
+    if (!password) { setError('Password required'); return }
     try {
-  loginLocal(payload)
+      await loginUser(payload)
       toast.success('Login successful')
       const pathByRole = { student: '/student', teacher: '/teacher', parent: '/parent', institution: '/institution', authority: '/authority' }
       nav(pathByRole[role] || '/')
     } catch (err) {
-      console.error('Login (local) failed:', err)
+      console.error('Login failed:', err)
       setError(err?.message || 'Invalid credentials')
     }
   }
@@ -78,7 +98,7 @@ export default function Login() {
               )}
 
               {!otpMode ? (
-                <Input type="password" label={role === 'student' ? 'PIN' : 'Password'} value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Input type="password" label={'Password'} value={password} onChange={(e) => setPassword(e.target.value)} />
               ) : (
                 <Input label="OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
               )}
