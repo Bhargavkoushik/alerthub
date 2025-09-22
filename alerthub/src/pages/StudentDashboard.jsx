@@ -159,7 +159,7 @@ export default function StudentDashboard() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 text-xl">⚡</div>
-            <div className="text-lg font-semibold">Dashboard</div>
+            <div className="text-lg font-semibold">Student Dashboard</div>
           </div>
           <div className="hidden gap-6 text-sm text-slate-200 sm:flex">
             <a className="hover:text-white/90" href="#modules">My Modules</a>
