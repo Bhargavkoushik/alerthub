@@ -5,6 +5,8 @@ import Student from './pages/Student.jsx'
 import StudentDashboard from './pages/StudentDashboard.js'
 import Teacher from './pages/Teacher.jsx'
 import ParentGuardian from './pages/ParentGuardian.jsx'
+import ParentDashboard from './pages/ParentDashboard.js'
+import StudentQuiz from './pages/StudentQuiz.jsx'
 import InstitutionTeams from './pages/InstitutionTeams.jsx'
 import Authority from './pages/Authority.jsx'
 import HomePage from './pages/HomePage.jsx'
@@ -29,9 +31,10 @@ function App() {
   {/* New dashboard aliases for role-based redirect */}
   <Route path="/student-dashboard" element={<StudentDashboard />} />
   <Route path="/teacher-dashboard" element={<Teacher />} />
-  <Route path="/parent-dashboard" element={<ParentGuardian />} />
+  <Route path="/parent-dashboard" element={<ParentDashboard />} />
   <Route path="/institution-dashboard" element={<InstitutionTeams />} />
   <Route path="/authority-dashboard" element={<Authority />} />
+  <Route path="/quiz" element={<StudentQuiz />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

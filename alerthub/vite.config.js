@@ -7,4 +7,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {},
+  optimizeDeps: {
+    include: ['framer-motion']
+  },
+  resolve: {
+    dedupe: ['react', 'react-dom']
+  }
 })

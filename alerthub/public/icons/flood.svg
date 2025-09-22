@@ -1,4 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <circle cx="16" cy="16" r="15" fill="#3b82f6"/>
-  <text x="16" y="21" font-size="14" font-family="Arial, Helvetica, sans-serif" fill="#fff" text-anchor="middle">FL</text>
+  <defs>
+    <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="16" fill="#0b1220"/>
+  <!-- waves -->
+  <path d="M3 20c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2v3c-3 0-3 2-6 2s-3-2-6-2-3 2-6 2-3-2-6-2z" fill="url(#gWater)"/>
+  <path d="M3 17c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2v2c-3 0-3 2-6 2s-3-2-6-2-3 2-6 2-3-2-6-2z" fill="#93c5fd" opacity="0.6"/>
 </svg>
