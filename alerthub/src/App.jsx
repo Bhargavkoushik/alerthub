@@ -4,6 +4,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Student from './pages/Student.jsx'
 import StudentDashboard from './pages/StudentDashboard.js'
 import Teacher from './pages/Teacher.jsx'
+import TeacherReports from './pages/TeacherReports.jsx'
+import TeacherQuizzes from './pages/TeacherQuizzes.jsx'
+import TeacherResources from './pages/TeacherResources.jsx'
+import TeacherMaps from './pages/TeacherMaps.jsx'
 import ParentGuardian from './pages/ParentGuardian.jsx'
 import ParentDashboard from './pages/ParentDashboard.js'
 import StudentQuiz from './pages/StudentQuiz.jsx'
@@ -25,6 +29,10 @@ function App() {
   {/* Existing detail routes */}
   <Route path="/student" element={<Student />} />
   <Route path="/teacher" element={<Teacher />} />
+  <Route path="/teacher/reports" element={<TeacherReports />} />
+  <Route path="/teacher/quizzes" element={<TeacherQuizzes />} />
+  <Route path="/teacher/resources" element={<TeacherResources />} />
+  <Route path="/teacher/maps" element={<TeacherMaps />} />
   <Route path="/parent" element={<ParentGuardian />} />
   <Route path="/institution" element={<InstitutionTeams />} />
   <Route path="/authority" element={<Authority />} />

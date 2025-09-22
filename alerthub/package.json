@@ -12,9 +12,11 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
     "alert-hub-root": "file:..",
-    "framer-motion": "^11.11.17",
+    "eslint-plugin-react": "^7.37.5",
+    "framer-motion": "^11.18.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.544.0",
+    "prop-types": "^15.8.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hot-toast": "^2.4.1",

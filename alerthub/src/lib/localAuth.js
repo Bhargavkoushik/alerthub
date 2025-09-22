@@ -11,7 +11,9 @@ function load() {
 }
 
 function save(list) {
-  try { localStorage.setItem(KEY, JSON.stringify(list)) } catch {}
+  try { localStorage.setItem(KEY, JSON.stringify(list)) } catch {
+    // ignore write failures (private mode or quota exceeded)
+  }
 }
 
 export function registerLocal({ full_name, role, password, username, email, phone, extra_data }) {
