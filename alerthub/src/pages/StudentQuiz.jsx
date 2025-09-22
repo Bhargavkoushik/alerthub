@@ -145,6 +145,73 @@ export default function StudentQuiz() {
     return Math.round((correct / total) * 100)
   }
 
+  // Save quiz results to localStorage when submitted
+  useEffect(() => {
+    if (submitted) {
+      // Calculate score inside useEffect to avoid dependency issues
+      let correct = 0
+      for (let i = 0; i < total; i++) {
+        const q = questions[i]
+        const a = answers[i]
+        if (q.type === 'single') {
+          if (typeof a === 'number' && a === q.answer) correct++
+        } else if (q.type === 'multi') {
+          const corr = Array.isArray(q.answer) ? q.answer.slice().sort() : []
+          const got = Array.isArray(a) ? a.slice().sort() : []
+          if (corr.length && corr.length === got.length && corr.every((v, k) => v === got[k])) correct++
+        } else if (q.type === 'text') {
+          const { keywords = [], minMatch = 2 } = q.answer || {}
+          const text = String(a || '').toLowerCase()
+          const matches = keywords.filter(k => text.includes(k.toLowerCase())).length
+          if (matches >= minMatch) correct++
+        }
+      }
+      const score = Math.round((correct / total) * 100)
+      
+      const currentName = localStorage.getItem('currentName') || 'Student'
+      const quizResult = {
+        studentName: currentName,
+        level: level,
+        score: score,
+        correctAnswers: correct,
+        totalQuestions: total,
+        completedAt: new Date().toISOString(),
+        questions: questions.map((q, i) => ({
+          question: q.q,
+          type: q.type,
+          studentAnswer: answers[i],
+          correctAnswer: q.answer,
+          isCorrect: (() => {
+            const a = answers[i]
+            if (q.type === 'single') {
+              return typeof a === 'number' && a === q.answer
+            } else if (q.type === 'multi') {
+              const corr = Array.isArray(q.answer) ? q.answer.slice().sort() : []
+              const got = Array.isArray(a) ? a.slice().sort() : []
+              return corr.length && corr.length === got.length && corr.every((v, k) => v === got[k])
+            } else if (q.type === 'text') {
+              const { keywords = [], minMatch = 2 } = q.answer || {}
+              const text = String(a || '').toLowerCase()
+              const matches = keywords.filter(k => text.includes(k.toLowerCase())).length
+              return matches >= minMatch
+            }
+            return false
+          })()
+        }))
+      }
+      
+      // Store the latest quiz result and also append to history
+      try {
+        const existingResults = JSON.parse(localStorage.getItem('quiz-results') || '[]')
+        const updatedResults = [quizResult, ...existingResults].slice(0, 10) // Keep last 10 results
+        localStorage.setItem('quiz-results', JSON.stringify(updatedResults))
+        localStorage.setItem('latest-quiz-result', JSON.stringify(quizResult))
+      } catch (error) {
+        console.error('Error saving quiz results:', error)
+      }
+    }
+  }, [submitted, level, answers, questions, total])
+
   const percent = submitted ? evaluate() : Math.round(((idx + 1) / total) * 100)
 
   function gaugeColor(p) {
