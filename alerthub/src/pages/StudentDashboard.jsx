@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState, lazy, Suspense } from 'react'
+import PropTypes from 'prop-types'
+import InlineChatHints from '../components/InlineChatHints.jsx'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 import { disastersData } from './disastersData'
 import FlipBookModal from './FlipBookModal.jsx'
@@ -176,6 +178,7 @@ export default function StudentDashboard() {
             <a className="hover:text-white/90" href="/quiz">Quiz</a>
             <a className="hover:text-white/90" href="#leaderboard">Leaderboard</a>
             <a className="hover:text-white/90" href="#rewards">Rewards</a>
+            <a className="hover:text-white/90" href="/community">Community</a>
             <a className="hover:text-white/90" href="#settings">Settings</a>
           </div>
         </div>
@@ -273,6 +276,7 @@ export default function StudentDashboard() {
 
         {/* Right Sidebar */}
         <aside className="space-y-6 lg:col-span-4">
+          <InlineChatHints hints={["What to do during an earthquake?","Show nearest safe zone","Who to contact?"]} />
           {/* Awareness Dashboard */}
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <h3 className="mb-3 text-sm font-semibold">Awareness Dashboard</h3>
@@ -282,7 +286,7 @@ export default function StudentDashboard() {
                   <PieChart>
                     <Pie data={data} dataKey="value" innerRadius={34} outerRadius={50} paddingAngle={3}>
                       {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
                   </PieChart>
@@ -298,8 +302,8 @@ export default function StudentDashboard() {
             <div className="mt-4">
               <h4 className="mb-2 text-xs font-semibold text-white/80">Recent Alerts</h4>
               <ul className="divide-y divide-white/10 overflow-hidden rounded-xl border border-white/10 text-sm">
-                {alerts.slice(0,4).map((a, idx) => (
-                  <li key={idx} className="flex items-center justify-between bg-white/5 px-3 py-2">
+                {alerts.slice(0,4).map((a) => (
+                  <li key={`${a.eventname}-${a.fromdate}`} className="flex items-center justify-between bg-white/5 px-3 py-2">
                     <div>
                       <div className="font-medium">{a.eventname}</div>
                       <div className="text-xs text-slate-300">Level: {a.alertlevel || 'NA'}</div>
@@ -462,8 +466,9 @@ function EmergencyOpsModal({ open, onClose }) {
   ]
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
-      <div className="max-h-[85vh] w-full max-w-6xl overflow-hidden rounded-2xl border border-white/10 bg-slate-900 p-4 shadow-xl" onClick={(e)=>e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button type="button" aria-label="Close modal" className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div className="relative z-10 max-h-[85vh] w-full max-w-6xl overflow-hidden rounded-2xl border border-white/10 bg-slate-900 p-4 shadow-xl">
         <div className="mb-3 flex items-center justify-between gap-2">
           <h3 className="text-base font-semibold text-white">Emergency Operations Center</h3>
           <button className="rounded-md bg-white/10 px-3 py-1 text-sm text-white hover:bg-white/20" onClick={onClose}>Close</button>
@@ -480,8 +485,8 @@ function EmergencyOpsModal({ open, onClose }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
-              {rows.map((r, i) => (
-                <tr key={i} className="odd:bg-white/0 even:bg-white/[0.03]">
+              {rows.map((r) => (
+                <tr key={r.entity} className="odd:bg-white/0 even:bg-white/[0.03]">
                   <td className="max-w-[320px] px-3 py-2 align-top text-white/90">{r.entity}</td>
                   <td className="min-w-[220px] px-3 py-2 align-top font-semibold text-red-400">
                     <div className="space-y-1 break-words">
@@ -489,8 +494,8 @@ function EmergencyOpsModal({ open, onClose }) {
                         .split(/[;,]+/)
                         .map((s) => s.trim())
                         .filter(Boolean)
-                        .map((line, idx) => (
-                          <div key={idx}>{line}</div>
+                        .map((line) => (
+                          <div key={`${r.entity}-${line}`}>{line}</div>
                         ))}
                     </div>
                   </td>
@@ -505,4 +510,13 @@ function EmergencyOpsModal({ open, onClose }) {
       </div>
     </div>
   )
+}
+
+Helplines.propTypes = {
+  onOpenOps: PropTypes.func.isRequired,
+}
+
+EmergencyOpsModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 }

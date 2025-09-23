@@ -57,15 +57,15 @@ export default function TeacherResources() {
           <div className="grid gap-3 md:grid-cols-4">
             <label className="grid gap-1 text-sm">
               <span className="text-xs text-slate-300">Class</span>
-              <select className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={form.classId} onChange={e=>setForm(prev=>({ ...prev, classId: e.target.value }))}>
-                <option value="">Select a class</option>
-                {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              <select className="rounded-lg border border-white/15 bg-white/15 px-3 py-2 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20" value={form.classId} onChange={e=>setForm(prev=>({ ...prev, classId: e.target.value }))}>
+                <option value="" className="text-slate-900">Select a class</option>
+                {classes.map(c => <option key={c.id} value={c.id} className="text-slate-900">{c.name}</option>)}
               </select>
             </label>
             <label className="grid gap-1 text-sm">
               <span className="text-xs text-slate-300">Disaster Type</span>
-              <select className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={form.type} onChange={e=>setForm(prev=>({ ...prev, type: e.target.value }))}>
-                {['Earthquake','Flood','Wildfire','Hurricane','Tsunami','Landslide','Drought','Tornado','Volcano'].map(t => <option key={t} value={t}>{t}</option>)}
+              <select className="rounded-lg border border-white/15 bg-white/15 px-3 py-2 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20" value={form.type} onChange={e=>setForm(prev=>({ ...prev, type: e.target.value }))}>
+                {['Earthquake','Flood','Wildfire','Hurricane','Tsunami','Landslide','Drought','Tornado','Volcano'].map(t => <option key={t} value={t} className="text-slate-900">{t}</option>)}
               </select>
             </label>
             <label className="grid gap-1 text-sm">

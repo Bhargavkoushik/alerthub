@@ -59,6 +59,14 @@ function Navbar() {
             >
               Home
             </NavLink>
+            <NavLink
+              to="/community"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? 'bg-white/70 text-neutral-900 shadow dark:bg-neutral-800/80 dark:text-white' : 'text-neutral-700 hover:text-brand dark:text-neutral-200'}`
+              }
+            >
+              Community
+            </NavLink>
             {/* New: direct link to Student Dashboard */}
             <NavLink
               to="/student-dashboard"
@@ -147,6 +155,9 @@ function Navbar() {
               {/* New: Dashboard link in mobile menu */}
               <Link to="/student-dashboard" className={linkBase} onClick={() => setMenuOpen(false)}>
                 Dashboard
+              </Link>
+              <Link to="/community" className={linkBase} onClick={() => setMenuOpen(false)}>
+                Community
               </Link>
               <button className={`${linkBase}`} onClick={() => { scrollToSection('disasters'); setMenuOpen(false) }}>About</button>
               <button className={`${linkBase}`} onClick={() => { scrollToSection('evolution'); setMenuOpen(false) }}>Evolution</button>
@@ -535,10 +546,7 @@ function Footer() {
         </div>
         <div className="relative">
           <div className="text-sm font-semibold">Need help?</div>
-          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Start a chat with our assistant.</p>
-          <button className="fixed bottom-6 right-6 rounded-full bg-brand px-5 py-3 font-semibold text-white shadow-lg hover:opacity-90">
-            Chat
-          </button>
+          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">For support, see Contact or FAQs.</p>
         </div>
       </div>
     </footer>

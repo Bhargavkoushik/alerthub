@@ -61,15 +61,7 @@ function useSeedData() {
   }, [])
 }
 
-function kpiCard({ title, value, sub }) {
-  return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
-      <div className="text-sm text-neutral-400">{title}</div>
-      <div className="mt-1 text-2xl font-semibold">{value}</div>
-      {sub ? <div className="mt-1 text-xs text-neutral-500">{sub}</div> : null}
-    </div>
-  )
-}
+// (Note) KPI cards are rendered inline in the header panel to match Student UI
 
 export default function Authority() {
   useSeedData()
@@ -159,154 +151,181 @@ export default function Authority() {
   }
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 py-6">
-      {/* Navbar */}
-      <nav className="mb-6 flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-950/60 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-emerald-400" />
-          <span className="font-semibold">AlertHub Authority</span>
-        </div>
-        <div className="flex items-center gap-4 text-sm">
-          <Link className="text-neutral-300 hover:text-white" to="/">Home</Link>
-          <Link className="text-neutral-300 hover:text-white" to="/authority/alerts">Alerts</Link>
-          <a className="text-neutral-300 hover:text-white" href="#contact">Contact</a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-slate-100">
+      {/* Top Navbar (Student style) */}
+      <nav className="sticky top-0 z-40 border-b border-white/10 bg-slate-900/80 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 text-xl"><AlertTriangle className="h-5 w-5" /></div>
+            <div className="text-lg font-semibold">Authority Dashboard</div>
+          </div>
+          <div className="hidden gap-6 text-sm text-slate-200 sm:flex">
+            <Link className="hover:text-white/90" to="/">Home</Link>
+            <Link className="hover:text-white/90" to="/authority/alerts">Alerts</Link>
+            <Link className="hover:text-white/90" to="/community">Community</Link>
+            <a className="hover:text-white/90" href="#contact">Contact</a>
+          </div>
         </div>
       </nav>
 
-      {/* Header */}
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Authority Dashboard</h2>
-          <p className="mt-1 text-neutral-400">Oversee disaster readiness and validate alerts</p>
-        </div>
-        <button
-          className="rounded-lg border border-neutral-700 px-3 py-2 text-sm hover:bg-neutral-800"
-          onClick={() => navigate('/authority/alerts')}
-        >
-          Manage Alerts
-        </button>
-      </div>
-
-      {/* KPI cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {kpiCard({ title: 'Schools Onboarded', value: kpis.total })}
-        {kpiCard({ title: 'Avg Readiness', value: `${kpis.avgReadiness}%`, sub: 'Across all districts' })}
-        {kpiCard({ title: 'Drills Conducted (YTD)', value: kpis.drillsYTD })}
-        {kpiCard({ title: 'Pending Alerts', value: kpis.pending })}
-      </div>
-
-      {/* Analytics */}
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 lg:col-span-2">
-          <div className="mb-2 flex items-center gap-2 text-sm font-medium">
-            <LineChart className="h-4 w-4 text-emerald-400" />
-            Readiness by District
+      {/* Main Grid */}
+      <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-12">
+        {/* Left / Center */}
+        <section className="space-y-6 lg:col-span-8">
+          {/* Welcome + KPIs */}
+          <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 p-5 shadow">
+            <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+              <div>
+                <h1 className="text-xl font-semibold md:text-2xl">Oversee readiness and validate community alerts</h1>
+                <p className="mt-1 text-sm text-slate-300">Policy analytics for regional planning</p>
+              </div>
+              <button
+                className="rounded-xl border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition hover:border-cyan-500/60 hover:bg-cyan-700 hover:text-white"
+                onClick={() => navigate('/authority/alerts')}
+              >
+                Manage Alerts
+              </button>
+            </div>
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs text-slate-300">Schools Onboarded</div>
+                <div className="mt-1 text-2xl font-semibold">{kpis.total}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs text-slate-300">Avg Readiness</div>
+                <div className="mt-1 text-2xl font-semibold">{kpis.avgReadiness}%</div>
+                <div className="text-xs text-slate-400">Across districts</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs text-slate-300">Drills Conducted (YTD)</div>
+                <div className="mt-1 text-2xl font-semibold">{kpis.drillsYTD}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs text-slate-300">Pending Alerts</div>
+                <div className="mt-1 text-2xl font-semibold">{kpis.pending}</div>
+              </div>
+            </div>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={readinessByDistrict}>
-                <XAxis dataKey="district" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" domain={[0, 100]} />
-                <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid #27272a' }} />
-                <Bar dataKey="readiness" fill="#34d399" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+
+          {/* Analytics */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 lg:col-span-2">
+              <div className="mb-2 flex items-center gap-2 text-sm font-medium">
+                <LineChart className="h-4 w-4 text-emerald-400" /> Readiness by District
+              </div>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={readinessByDistrict}>
+                    <XAxis dataKey="district" stroke="#cbd5e1" />
+                    <YAxis stroke="#cbd5e1" domain={[0, 100]} />
+                    <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155', color: '#e2e8f0' }} />
+                    <Bar dataKey="readiness" fill="#10b981" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="mb-2 text-sm font-medium">Alert Types Distribution</div>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={alertTypeAgg} dataKey="value" nameKey="name" outerRadius={86} innerRadius={46}>
+                      {alertTypeAgg.map((entry, index) => (
+                        <Cell key={`c-${entry.name}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155', color: '#e2e8f0' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
-          <div className="mb-2 text-sm font-medium">Alert Types Distribution</div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={alertTypeAgg} dataKey="value" nameKey="name" outerRadius={86} innerRadius={46}>
-                  {alertTypeAgg.map((entry, index) => (
-                    <Cell key={`c-${entry.name}`} fill={COLORS[index % COLORS.length]} />
+
+        </section>
+
+        {/* Right Sidebar */}
+        <aside className="space-y-6 lg:col-span-4">
+          <div id="alerts" className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm font-semibold">
+                <AlertTriangle className="h-4 w-4 text-amber-400" /> Pending Alerts
+              </div>
+              <Link to="/authority/alerts" className="text-xs text-emerald-400 hover:underline">See all</Link>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-white/10">
+              <table className="min-w-full text-sm">
+                <thead className="bg-white/5 text-left text-slate-300">
+                  <tr>
+                    <th className="px-3 py-2">Type</th>
+                    <th className="px-3 py-2">District</th>
+                    <th className="px-3 py-2">Reported</th>
+                    <th className="px-3 py-2">Source</th>
+                    <th className="px-3 py-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  {pendingAlerts.slice(0, 6).map((a) => (
+                    <tr key={a.id} className="odd:bg-white/0 even:bg-white/[0.03]">
+                      <td className="px-3 py-2">{a.type}</td>
+                      <td className="px-3 py-2">{a.district}</td>
+                      <td className="px-3 py-2">{new Date(a.reportedAt).toLocaleString()}</td>
+                      <td className="px-3 py-2">{a.reporter}</td>
+                      <td className="px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <button
+                            className="rounded-md border border-white/10 bg-white/10 px-2 py-1 text-xs hover:bg-white/20"
+                            onClick={() => navigate(`/authority/alerts/${a.id}`)}
+                            title="Open verification"
+                          >
+                            Review
+                          </button>
+                          <button
+                            className="inline-flex items-center gap-1 rounded-md border border-emerald-500/40 bg-emerald-500/10 px-2 py-1 text-xs text-emerald-300 hover:bg-emerald-600/20"
+                            onClick={() => handleQuickVerify(a.id, 'verified')}
+                            title="Quick verify"
+                          >
+                            <CheckCircle2 className="h-4 w-4" /> Verify
+                          </button>
+                          <button
+                            className="inline-flex items-center gap-1 rounded-md border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-xs text-rose-300 hover:bg-rose-600/20"
+                            onClick={() => handleQuickVerify(a.id, 'rejected')}
+                            title="Reject"
+                          >
+                            <XCircle className="h-4 w-4" /> Reject
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
                   ))}
-                </Pie>
-                <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid #27272a' }} />
-              </PieChart>
-            </ResponsiveContainer>
+                  {pendingAlerts.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="px-3 py-6 text-center text-slate-400">No pending alerts</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Pending alerts */}
-      <div id="alerts" className="mt-6 rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <AlertTriangle className="h-4 w-4 text-amber-400" />
-            Community-Submitted Alerts (Pending)
+          <div id="contact" className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="mb-1 flex items-center gap-2 text-sm font-semibold">
+              <MapPin className="h-4 w-4 text-sky-400" /> Contact
+            </div>
+            <p className="text-sm text-slate-300">NDMA Control Room: 011-1078 · Email: controlroom@ndma.gov.in</p>
           </div>
-          <Link to="/authority/alerts" className="text-sm text-emerald-400 hover:underline">
-            See all
-          </Link>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="text-left text-neutral-400">
-                <th className="px-3 py-2">Type</th>
-                <th className="px-3 py-2">District</th>
-                <th className="px-3 py-2">Reported</th>
-                <th className="px-3 py-2">Source</th>
-                <th className="px-3 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pendingAlerts.slice(0, 6).map((a) => (
-                <tr key={a.id} className="border-t border-neutral-800">
-                  <td className="px-3 py-2">{a.type}</td>
-                  <td className="px-3 py-2">{a.district}</td>
-                  <td className="px-3 py-2">{new Date(a.reportedAt).toLocaleString()}</td>
-                  <td className="px-3 py-2">{a.reporter}</td>
-                  <td className="px-3 py-2">
-                    <div className="flex items-center gap-2">
-                      <button
-                        className="rounded-md border border-neutral-700 px-2 py-1 hover:bg-neutral-800"
-                        onClick={() => navigate(`/authority/alerts/${a.id}`)}
-                        title="Open verification"
-                      >
-                        Review
-                      </button>
-                      <button
-                        className="inline-flex items-center gap-1 rounded-md border border-emerald-700/60 px-2 py-1 text-emerald-300 hover:bg-emerald-900/20"
-                        onClick={() => handleQuickVerify(a.id, 'verified')}
-                        title="Quick verify"
-                      >
-                        <CheckCircle2 className="h-4 w-4" /> Verify
-                      </button>
-                      <button
-                        className="inline-flex items-center gap-1 rounded-md border border-rose-700/60 px-2 py-1 text-rose-300 hover:bg-rose-900/20"
-                        onClick={() => handleQuickVerify(a.id, 'rejected')}
-                        title="Reject"
-                      >
-                        <XCircle className="h-4 w-4" /> Reject
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {pendingAlerts.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="px-3 py-6 text-center text-neutral-400">
-                    No pending alerts
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        </aside>
+      </main>
 
-      {/* Contact */}
-      <div id="contact" className="mt-8 rounded-xl border border-neutral-800 bg-neutral-950/60 p-4">
-        <div className="mb-1 flex items-center gap-2 text-sm font-medium">
-          <MapPin className="h-4 w-4 text-sky-400" /> Contact
+      {/* Footer */}
+      <footer className="border-t border-white/10 bg-slate-900/50">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-slate-300 md:flex-row">
+          <div className="flex gap-4">
+            <a className="hover:text-white/90" href="#alerts">Alerts</a>
+            <a className="hover:text-white/90" href="#contact">Contact</a>
+          </div>
+          <div className="text-xs">© {new Date().getFullYear()} AlertHub — Authority Console</div>
         </div>
-        <p className="text-sm text-neutral-400">
-          NDMA Control Room: 011-1078 · Email: controlroom@ndma.gov.in
-        </p>
-      </div>
-    </section>
+      </footer>
+    </div>
   )
 }
