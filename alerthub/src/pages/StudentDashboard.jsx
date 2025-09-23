@@ -50,7 +50,11 @@ export default function StudentDashboard() {
   const name = useMemo(() => localStorage.getItem('currentName') || 'varun', [])
 
   // Progress percent (computed from module completion below)
-  const [progressPct, setProgressPct] = useState(0)
+  const [progressPct, setProgressPct] = useState(() => {
+    // Always start with 0% for new users
+    const saved = localStorage.getItem('progressPct')
+    return saved ? Math.max(0, parseInt(saved) || 0) : 0
+  })
 
   // Show only the requested disaster modules in a fixed, neat order
   // Reordered so Flood appears to the right of Wildfire as a pair; Landslide follows after
@@ -63,7 +67,13 @@ export default function StudentDashboard() {
 
   // Track visited sections per module to infer completion
   const [visitedMap, setVisitedMap] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('visited-modules') || 'null') || {} } catch { return {} }
+    // Always start with empty map for new users
+    try { 
+      const saved = localStorage.getItem('visited-modules')
+      return saved ? JSON.parse(saved) : {} 
+    } catch { 
+      return {} 
+    }
   })
   useEffect(() => { localStorage.setItem('visited-modules', JSON.stringify(visitedMap)) }, [visitedMap])
 
@@ -159,7 +169,7 @@ export default function StudentDashboard() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 text-xl">⚡</div>
-            <div className="text-lg font-semibold">Dashboard</div>
+            <div className="text-lg font-semibold">Student Dashboard</div>
           </div>
           <div className="hidden gap-6 text-sm text-slate-200 sm:flex">
             <a className="hover:text-white/90" href="#modules">My Modules</a>

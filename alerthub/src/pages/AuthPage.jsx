@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 
 const roles = [
@@ -142,7 +141,6 @@ function RegisterForm({ onFocusLogin, autoFocusFirst = false }) {
     if (password !== confirmPassword) return setError('Passwords do not match.')
 
     // No backend yet
-    // eslint-disable-next-line no-console
     console.log('Register submit', { fullName, role, [contactMeta.key]: contact, password })
   }
 
@@ -236,8 +234,7 @@ function LoginForm({ onFocusRegister, autoFocusFirst = false }) {
   function handleSendOtp() {
     if (!identity.trim()) return setError('Enter your email/phone to receive an OTP.')
     setError('')
-    // eslint-disable-next-line no-console
-    console.log('Send OTP to', identity)
+  console.log('Send OTP to', identity)
   }
 
   function handleSubmit(e) {
@@ -246,9 +243,8 @@ function LoginForm({ onFocusRegister, autoFocusFirst = false }) {
     if (!identity.trim()) return setError('Please enter your login identifier.')
     if (otpMode && !otp.trim()) return setError('Please enter the OTP sent to you.')
     if (!otpMode && !password) return setError(`Please enter your ${secretLabel}.`)
-    // No backend yet
-    // eslint-disable-next-line no-console
-    console.log('Login submit', { role, [idMeta.key]: identity, password: otpMode ? undefined : password, otp: otpMode ? otp : undefined, verificationCode: role === 'authority' ? verificationCode : undefined, remember })
+  // No backend yet
+  console.log('Login submit', { role, [idMeta.key]: identity, password: otpMode ? undefined : password, otp: otpMode ? otp : undefined, verificationCode: role === 'authority' ? verificationCode : undefined, remember })
   }
 
   function switchRole() {

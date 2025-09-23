@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
 import { useNavigate, Link } from 'react-router-dom'
 // Auth temporarily skipped for demo (no DB yet)
@@ -123,6 +124,11 @@ function Input({ label, className = '', ...rest }) {
   )
 }
 
+Input.propTypes = {
+  label: PropTypes.string.isRequired,
+  className: PropTypes.string,
+}
+
 function Select({ label, children, className = '', ...rest }) {
   return (
     <label className="block text-sm">
@@ -132,6 +138,16 @@ function Select({ label, children, className = '', ...rest }) {
   )
 }
 
+Select.propTypes = {
+  label: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  className: PropTypes.string,
+}
+
 function Button({ className = '', ...rest }) {
   return <button {...rest} className={`inline-flex items-center justify-center rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white shadow hover:opacity-90 ${className}`} />
+}
+
+Button.propTypes = {
+  className: PropTypes.string,
 }

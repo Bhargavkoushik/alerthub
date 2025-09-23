@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import LiveMap from '../LiveMap'
 import { Link, NavLink } from 'react-router-dom'
 import { Globe, Settings, Moon, SunMedium, Menu, Pencil, SatelliteDish, Shield } from 'lucide-react'
@@ -177,6 +178,11 @@ function Section({ title, children }) {
   )
 }
 
+Section.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.node,
+}
+
 function Hero() {
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-rose-50 to-amber-50 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-900">
@@ -232,55 +238,66 @@ const disasterItems = [
   },
 ]
 
-function Disasters() {
-  function GlassCard({ emoji, title, desc }) {
-    return (
-      <div className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl md:min-h-[280px]">
-        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-fuchsia-500/0 via-pink-500/0 to-sky-500/0 opacity-0 transition duration-300 group-hover:from-fuchsia-500/20 group-hover:via-pink-500/10 group-hover:to-sky-500/20 group-hover:opacity-100" />
-        <div className="relative z-10">
-          <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 to-pink-500 text-lg">{emoji}</div>
-          <div className="text-lg font-semibold text-white">{title}</div>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-200">{desc}</p>
+function GlassCard({ emoji, title, desc }) {
+  return (
+    <div className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl md:min-h-[280px]">
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-fuchsia-500/0 via-pink-500/0 to-sky-500/0 opacity-0 transition duration-300 group-hover:from-fuchsia-500/20 group-hover:via-pink-500/10 group-hover:to-sky-500/20 group-hover:opacity-100" />
+      <div className="relative z-10">
+        <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 to-pink-500 text-lg">{emoji}</div>
+        <div className="text-lg font-semibold text-white">{title}</div>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-200">{desc}</p>
+      </div>
+    </div>
+  )
+}
+
+GlassCard.propTypes = {
+  emoji: PropTypes.node,
+  title: PropTypes.string,
+  desc: PropTypes.string,
+}
+
+function ImageTile({ src, alt }) {
+  // Try multiple common extensions so images show even if not saved as .png
+  const base = src.replace(/\.(png|jpg|jpeg|webp)$/i, '')
+  const candidates = [
+    `${base}.png`,
+    `${base}.jpg`,
+    `${base}.jpeg`,
+    `${base}.webp`,
+  ]
+  const [idx, setIdx] = useState(0)
+  const [failed, setFailed] = useState(false)
+  const tryNext = () => {
+    if (idx < candidates.length - 1) setIdx((i) => i + 1)
+    else setFailed(true)
+  }
+  return (
+    <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl md:min-h-[280px]">
+      {!failed ? (
+        <img
+          src={candidates[idx]}
+          alt={alt}
+          loading="lazy"
+          className="h-64 w-full object-cover md:h-[280px]"
+          onError={tryNext}
+        />
+      ) : (
+        <div className="flex h-64 w-full items-center justify-center text-sm text-neutral-300 md:h-[280px]">
+          Image coming soon
         </div>
-      </div>
-    )
-  }
+      )}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+    </div>
+  )
+}
 
-  function ImageTile({ src, alt }) {
-    // Try multiple common extensions so images show even if not saved as .png
-    const base = src.replace(/\.(png|jpg|jpeg|webp)$/i, '')
-    const candidates = [
-      `${base}.png`,
-      `${base}.jpg`,
-      `${base}.jpeg`,
-      `${base}.webp`,
-    ]
-    const [idx, setIdx] = useState(0)
-    const [failed, setFailed] = useState(false)
-    const tryNext = () => {
-      if (idx < candidates.length - 1) setIdx((i) => i + 1)
-      else setFailed(true)
-    }
-    return (
-      <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl md:min-h-[280px]">
-        {!failed ? (
-          <img
-            src={candidates[idx]}
-            alt={alt}
-            loading="lazy"
-            className="h-64 w-full object-cover md:h-[280px]"
-            onError={tryNext}
-          />
-        ) : (
-          <div className="flex h-64 w-full items-center justify-center text-sm text-neutral-300 md:h-[280px]">
-            Image coming soon
-          </div>
-        )}
-        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
-      </div>
-    )
-  }
+ImageTile.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string,
+}
 
+function Disasters() {
   return (
     <div className="relative isolate overflow-hidden">
       <section id="disasters" className="relative mx-auto w-full max-w-7xl px-4 py-16">

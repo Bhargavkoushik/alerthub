@@ -12,7 +12,7 @@ function load() {
 
 function save(list) {
   try { localStorage.setItem(KEY, JSON.stringify(list)) } catch {
-    // ignore write errors in demo mode
+    // ignore write failures (private mode or quota exceeded)
   }
 }
 
