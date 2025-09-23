@@ -362,7 +362,7 @@ function Process() {
       <div className="text-center">
         <h2 className="text-2xl font-extrabold tracking-wide text-cyan-300 md:text-3xl">GETTING STARTED</h2>
         <div className="mx-auto mt-2 h-1 w-28 rounded-full bg-gradient-to-r from-fuchsia-500 to-cyan-400" />
-        <p className="mt-2 text-sm text-neutral-200">It's easy as 1, 2, 3</p>
+  <p className="mt-2 text-sm text-neutral-200">It&apos;s easy as 1, 2, 3</p>
       </div>
 
       <div className="mt-10 grid justify-center gap-8 md:grid-cols-3">

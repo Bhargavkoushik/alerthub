@@ -9,6 +9,8 @@ import ParentDashboard from './pages/ParentDashboard.js'
 import StudentQuiz from './pages/StudentQuiz.jsx'
 import InstitutionTeams from './pages/InstitutionTeams.jsx'
 import Authority from './pages/Authority.jsx'
+import AuthorityAlerts from './pages/AuthorityAlerts.jsx'
+import AlertVerification from './pages/AlertVerification.jsx'
 import HomePage from './pages/HomePage.jsx'
 import Register from './pages/Register.jsx'
 import Login from './pages/Login.jsx'
@@ -28,6 +30,8 @@ function App() {
   <Route path="/parent" element={<ParentGuardian />} />
   <Route path="/institution" element={<InstitutionTeams />} />
   <Route path="/authority" element={<Authority />} />
+  <Route path="/authority/alerts" element={<AuthorityAlerts />} />
+  <Route path="/authority/alerts/:id" element={<AlertVerification />} />
   {/* New dashboard aliases for role-based redirect */}
   <Route path="/student-dashboard" element={<StudentDashboard />} />
   <Route path="/teacher-dashboard" element={<Teacher />} />
