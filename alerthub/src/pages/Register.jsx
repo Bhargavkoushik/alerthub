@@ -49,7 +49,36 @@ export default function Register() {
       toast.error('Please fill required fields and confirm password')
       return
     }
-  const extra_data = { role_specific: fields, location: base.location }
+    
+    // Prepare role-specific extra data
+    const extra_data = {
+      location: base.location,
+      grade: fields.grade,
+      school: fields.school_name,
+      studentId: fields.student_id,
+      dateOfBirth: fields.date_of_birth,
+      emergencyContact: fields.parent_contact,
+      employeeId: fields.employee_id,
+      subjects: fields.subjects,
+      grades: fields.grades,
+      qualification: fields.qualification,
+      experienceYears: fields.experience_years,
+      occupation: fields.occupation,
+      children: fields.children,
+      department: fields.department_name,
+      position: fields.position,
+      badgeNumber: fields.badge_number,
+      jurisdiction: fields.jurisdiction,
+      clearanceLevel: fields.clearance_level,
+      institutionName: fields.institution_name,
+      institutionType: fields.institution_type,
+      registrationNumber: fields.registration_number,
+      establishedYear: fields.established_year,
+      capacity: fields.staff_students_count,
+      contactPerson: fields.admin_name,
+      address: base.location
+    }
+
     const payload = {
       full_name: base.full_name,
       role,
@@ -59,13 +88,18 @@ export default function Register() {
       phone: fields.phone || (!fields.email_or_phone?.includes('@') ? fields.email_or_phone : undefined),
       extra_data,
     }
+    
     try {
-      const { user } = registerLocal(payload)
-      toast.success('Registration successful')
-      console.log('Registered (local):', user)
+      const { user } = await registerLocal(payload)
+      toast.success('Registration successful! You can now login.')
+      console.log('Registered successfully:', user)
+      // Redirect to login after successful registration
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 2000)
     } catch (err) {
-      console.error('Register (local) failed:', err)
-      toast.error(err?.message || 'Registration failed')
+      console.error('Registration failed:', err)
+      toast.error(err?.message || 'Registration failed. Please try again.')
     }
   }
 

@@ -374,8 +374,8 @@ export default function ParentDashboard() {
         <section className="space-y-6 lg:col-span-8">
           {/* Greeting + Top KPIs */}
           <div id="home" className="rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 p-5 shadow">
-            <h2 className="text-base font-semibold">Hi {childName ? `${childName.split(' ')[0]}'s Parent` : 'Parent'} 👋</h2>
-            <p className="mt-1 text-sm text-slate-300">Here's your family's safety status today.</p>
+            <h2 className="text-base font-semibold">Hi {childName ? `${childName.split(' ')[0]}&apos;s Parent` : 'Parent'} 👋</h2>
+            <p className="mt-1 text-sm text-slate-300">Here&apos;s your family&apos;s safety status today.</p>
             <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
               <div className="mb-2 text-xs font-semibold text-slate-200">Family Preparedness</div>
               {(() => {
@@ -438,7 +438,7 @@ export default function ParentDashboard() {
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-200">
                 <CheckCircle2 className="h-4 w-4 text-cyan-400" /> 
-                Child's Quiz Performance
+                Child&apos;s Quiz Performance
               </div>
             </div>
             
@@ -609,29 +609,29 @@ export default function ParentDashboard() {
             <button onClick={() => {
               const flood = disastersData.find(d=>d.id==='flood') || disastersData[0]
               openDosDonts(flood)
-            }} className="rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-700">View Do's & Don'ts</button>
+            }} className="rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-700">View Do&apos;s &amp; Don&apos;ts</button>
           </div>
 
           {/* Today's Task */}
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow">
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-200"><CalendarCheck className="h-4 w-4 text-cyan-400" /> Today's Task</div>
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-200"><CalendarCheck className="h-4 w-4 text-cyan-400" /> Today&apos;s Task</div>
             {(() => {
               const flood = disastersData.find(d=>d.id==='flood') || disastersData[0]
               return (
-                <button onClick={() => openDosDonts(flood)} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-slate-200 hover:border-cyan-400/40 hover:bg-cyan-500/10">Review {flood.title} Do's & Don'ts with your child</button>
+                <button onClick={() => openDosDonts(flood)} className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-slate-200 hover:border-cyan-400/40 hover:bg-cyan-500/10">Review {flood.title} Do&apos;s &amp; Don&apos;ts with your child</button>
               )
             })()}
           </div>
 
           {/* Do's & Don'ts Quick Links */}
           <div id="dosdonts" className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow">
-            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-200"><BookOpenText className="h-4 w-4 text-cyan-400" /> Do's & Don'ts — Quick Access</div>
+            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-200"><BookOpenText className="h-4 w-4 text-cyan-400" /> Do&apos;s &amp; Don&apos;ts — Quick Access</div>
             <div className="grid max-h-80 gap-2 overflow-auto pr-1">
               {quickLinks.map((m) => (
                 <button key={m.id} onClick={() => openDosDonts(m)} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-slate-200 hover:border-cyan-400/40 hover:bg-cyan-500/10">
                   <span className="flex items-center gap-2">
                     <DisasterIcon id={m.id} />
-                    <span>View {m.title} Do's & Don'ts</span>
+                    <span>View {m.title} Do&apos;s &amp; Don&apos;ts</span>
                   </span>
                   <ListChecks className="h-4 w-4 text-slate-400" />
                 </button>

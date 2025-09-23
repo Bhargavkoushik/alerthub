@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import toast from 'react-hot-toast'
 import { useNavigate, Link } from 'react-router-dom'
-// Auth temporarily skipped for demo (no DB yet)
+import { loginLocal } from '../lib/localAuth'
 
 const roles = ['student','teacher','parent','institution','authority']
 
@@ -27,25 +27,62 @@ export default function Login() {
   async function submit(e) {
     e.preventDefault()
     setError('')
-    // Skip actual authentication for now and just route based on selected role
-    const pathByRole = {
-      student: '/student-dashboard',
-      teacher: '/teacher-dashboard',
-      parent: '/parent-dashboard',
-      institution: '/institution-dashboard',
-      authority: '/authority-dashboard',
+    
+    // Validate input fields
+    if (!password && !otpMode) {
+      setError('Please enter your password')
+      return
     }
-    // Persist a display name from login inputs so dashboards can greet correctly
+    
+    if (otpMode && !otp) {
+      setError('Please enter the OTP')
+      return
+    }
+    
+    // Validate identity field based on role
+    const identityValue = identity.username || identity.email || identity.phone
+    if (!identityValue) {
+      setError(`Please enter your ${idMeta.label.toLowerCase()}`)
+      return
+    }
+    
     try {
-      const nameFromUsername = identity.username?.trim()
-      const nameFromEmail = identity.email?.trim()?.split('@')[0]
-      const nameFromPhone = identity.phone?.trim()
-      const displayName = (nameFromUsername || nameFromEmail || nameFromPhone || 'varun')
-      localStorage.setItem('currentName', displayName)
-      localStorage.setItem('currentRole', role)
-  } catch { /* no-op */ }
-    toast.success('Redirecting to your dashboard (demo)')
-    nav(pathByRole[role] || '/')
+      // For OTP mode, handle differently (for now, treat as password)
+      const loginPassword = otpMode ? otp : password
+      
+      // Prepare login credentials
+      const credentials = {
+        role,
+        username: identity.username,
+        email: identity.email,
+        phone: identity.phone,
+        password: loginPassword
+      }
+      
+      // Attempt login with backend/database
+      const { user } = await loginLocal(credentials)
+      
+      // Store user info for dashboard access
+      localStorage.setItem('currentName', user.firstName || user.full_name || 'User')
+      localStorage.setItem('currentRole', user.role)
+      localStorage.setItem('currentUserId', user.id || user._id)
+      
+      // Success - redirect to appropriate dashboard
+      const pathByRole = {
+        student: '/student-dashboard',
+        teacher: '/teacher-dashboard',
+        parent: '/parent-dashboard',
+        institution: '/institution-dashboard',
+        authority: '/authority-dashboard',
+      }
+      
+      toast.success(`Welcome back, ${user.firstName || user.full_name}!`)
+      nav(pathByRole[user.role] || '/')
+      
+    } catch (err) {
+      console.error('Login failed:', err)
+      setError(err?.message || 'Invalid credentials. Please check your login details.')
+    }
   }
 
   return (
