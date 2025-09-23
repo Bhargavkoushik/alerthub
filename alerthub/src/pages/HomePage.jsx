@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import LiveMap from '../LiveMap'
 import { Link, NavLink } from 'react-router-dom'
 import { Globe, Settings, Moon, SunMedium, Menu, Pencil, SatelliteDish, Shield } from 'lucide-react'
+import '../index.css' // Ensure Tailwind CSS is imported
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -226,7 +227,7 @@ const disasterItems = [
     title: 'Understanding Disasters',
     desc:
       'Disasters can strike anytime, disrupting lives and communities. AlertHub provides reliable, real-time information to help you stay aware, prepared, and safe.',
-    img: '/images/disasters-1.png',
+    img: '/images/image1.jpg',
     alt: 'Understanding Disasters — Stay Aware. Be Prepared. Stay Safe.',
   },
   {
@@ -235,7 +236,7 @@ const disasterItems = [
     title: 'Types of Disasters Covered',
     desc:
       'Learn and track major disaster events including Earthquake, Volcano, Tornado, Tsunami, Hurricane, Drought, Wildfire, Landslide, and Flood — with guides, alerts, and safety resources for each.',
-    img: '/images/disasters-2.png',
+    img: '/images/image2.jpg',
     alt: 'Types of Disasters Covered — icons around a compass',
   },
   {
@@ -244,7 +245,7 @@ const disasterItems = [
     title: 'For Everyone in the Community',
     desc:
       'Tailored dashboards and tools for Students, Teachers, Parents, Institutions, and Authorities — ensuring safety guidance and alerts are accessible to all.',
-    img: '/images/disasters-3.png',
+    img: '/images/image3.jpg',
     alt: 'For Everyone in the Community — shield and roles',
   },
 ]
@@ -284,17 +285,19 @@ function ImageTile({ src, alt }) {
     else setFailed(true)
   }
   return (
-    <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl md:min-h-[280px]">
+    <div className="relative h-96 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-xl">
       {!failed ? (
-        <img
-          src={candidates[idx]}
-          alt={alt}
-          loading="lazy"
-          className="h-64 w-full object-cover md:h-[280px]"
-          onError={tryNext}
-        />
+        <div className="flex h-full w-full items-center justify-center">
+          <img
+            src={candidates[idx]}
+            alt={alt}
+            loading="lazy"
+            className="max-h-full max-w-full object-contain"
+            onError={tryNext}
+          />
+        </div>
       ) : (
-        <div className="flex h-64 w-full items-center justify-center text-sm text-neutral-300 md:h-[280px]">
+        <div className="flex h-full w-full items-center justify-center text-sm text-neutral-300">
           Image coming soon
         </div>
       )}
@@ -326,7 +329,7 @@ function Disasters() {
             </div>
             <div className="md:flex md:justify-end">
               <div className="w-full md:w-[520px] xl:w-[560px]">
-                <ImageTile src={disasterItems[0].img} alt={disasterItems[0].alt} />
+                <ImageTile className="home-image" src={disasterItems[0].img} alt={disasterItems[0].alt} /> 
               </div>
             </div>
           </div>
@@ -451,13 +454,6 @@ function History() {
       lesson: 'Stronger coastal preparedness supported by real-time alerts and resilient infrastructure.',
       marker: '📍',
     },
-    {
-      year: '2021',
-      title: 'COVID-19 Pandemic 🦠',
-      impact: 'Nationwide health crisis with millions affected.',
-      lesson: 'Preparedness for biological and health emergencies is as vital as natural disasters.',
-      marker: '📍',
-    },
   ]
 
   return (
@@ -511,7 +507,7 @@ function History() {
           </div>
 
           {/* CTA */}
-          <div className="mt-12 text-center">
+          <div className="mt-20 text-center">
             <div className="text-white/90">“History has taught us the cost of being unprepared. The future doesn’t have to repeat the past.”</div>
             <Link to="/register" className="mt-4 inline-block rounded-full bg-brand px-6 py-3 font-semibold text-white shadow hover:opacity-90">
               Register to Get Prepared

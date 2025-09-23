@@ -15,3 +15,7 @@ body {
   background: #0a0a0a; /* near neutral-950 */
   color: #e5e7eb; /* neutral-200 */
 }
+.home-image{
+  height: 300px;
+  width: 300px;
+}

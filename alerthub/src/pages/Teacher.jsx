@@ -83,7 +83,7 @@ export default function Teacher() {
   const today = useMemo(() => new Date().toISOString().slice(0,10), [])
   const pctFromDate = useCallback((iso) => {
     if (!iso) return 0
-    return iso < today ? 70 : 15 // if due/past → assume mostly done, otherwise planned
+    return iso < today ? 0 : 0 // Always start with 0% for new users
   }, [today])
 
   // Compute per-class metrics
