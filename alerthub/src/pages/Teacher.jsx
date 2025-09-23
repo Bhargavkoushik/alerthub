@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { AnimatePresence, motion } from 'framer-motion'
+import PropTypes from 'prop-types'
 import { toast } from 'react-hot-toast'
+import InlineChatHints from '../components/InlineChatHints.jsx'
 
 // Simple helper progress bar component matching student UI vibe
 function ProgressBar({ value, color = 'bg-emerald-500' }) {
@@ -10,6 +12,11 @@ function ProgressBar({ value, color = 'bg-emerald-500' }) {
       <div className={`h-full rounded-full ${color}`} style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>
   )
+}
+
+ProgressBar.propTypes = {
+  value: PropTypes.number.isRequired,
+  color: PropTypes.string,
 }
 
 const HAZARD_TYPES = ['Earthquake','Flood','Wildfire','Hurricane','Tsunami','Landslide','Drought','Tornado','Volcano']
@@ -26,7 +33,7 @@ const NDMA_GUIDELINES = [
   { no: 5, title: 'Updated National Guidelines for Mental Health and Psychosocial Support Services in Disasters - 2023', date: 'Dec 2023', size: '17 MB', href: 'https://ndma.gov.in/sites/default/files/PDF/Guidelines/Guidelines_Mental_Health_Psychosocial_Support_Dec23.pdf' },
   { no: 6, title: 'National Guidelines for Preparation of Action Plan – Prevention and Management of Cold Wave and Frost 2021', date: 'Oct 2021', size: '7 MB', href: 'https://ndma.gov.in/sites/default/files/PDF/Guidelines/Guidelines-on-Cold-Wave-and-Frost.pdf' },
   { no: 7, title: 'Simplified Guideline for Earthquake Safety of Building from National Building Code of India 2016', date: 'May 2021', size: '10 MB', href: 'https://ndma.gov.in/sites/default/files/PDF/Guidelines/Simplified_Guidelines_for_earthquake.pdf' },
-  { no: 8, title: "Cool Roof: House Owners' Guide to alternate roof cooling solutions", date: 'May 2021', size: '8.30 MB', href: '#' },
+  { no: 8, title: 'Cool Roof: House Owners\' Guide to alternate roof cooling solutions', date: 'May 2021', size: '8.30 MB', href: '#' },
   { no: 9, title: 'Guidelines on Management of Glacial Lake Outburst Floods (GLOFs)', date: 'Oct 2020', size: '11.21 MB', href: '#' },
   { no: '9.a', title: 'Compendium of Task Force Report on NDMA Guidelines on Management of GLOFs', date: 'Oct 2020', size: '12.70 MB', href: '#' },
   { no: '9.b', title: 'Summary for Policy Makers on NDMA Guidelines on Management of GLOFs', date: 'Oct 2020', size: '0.41 MB', href: '#' },
@@ -42,8 +49,6 @@ const NDMA_GUIDELINES = [
 ]
 
 export default function Teacher() {
-  // Touch motion to satisfy certain linters that miss JSX usage
-  const _ensureMotionUsed = motion && AnimatePresence
   // Classes (sections) — persisted so user changes survive reloads
   const [classes] = useState(() => {
     try {
@@ -160,6 +165,7 @@ export default function Teacher() {
           <div className="hidden gap-6 text-sm text-slate-200 sm:flex">
             <a className="hover:text-white/90" href="/">Home</a>
             <a className="hover:text-white/90" href="#alerts">Alerts</a>
+            <a className="hover:text-white/90" href="/community">Community</a>
             <a className="hover:text-white/90" href="#contact">Contact</a>
             <a className="hover:text-white/90" href="/login">Logout</a>
           </div>
@@ -232,7 +238,7 @@ export default function Teacher() {
                     </li>
                   ))}
                   {drills.length === 0 && (
-                    <li className="px-3 py-3 text-sm text-slate-300">No drills yet. Click "Assign Drill" to schedule one.</li>
+                    <li className="px-3 py-3 text-sm text-slate-300">No drills yet. Click &quot;Assign Drill&quot; to schedule one.</li>
                   )}
                 </ul>
               </div>
@@ -275,7 +281,7 @@ export default function Teacher() {
                     </li>
                   ))}
                   {modules.length === 0 && (
-                    <li className="px-3 py-3 text-sm text-slate-300">No modules yet. Click "Assign Module" to create one.</li>
+                    <li className="px-3 py-3 text-sm text-slate-300">No modules yet. Click &quot;Assign Module&quot; to create one.</li>
                   )}
                 </ul>
               </div>
@@ -299,13 +305,14 @@ export default function Teacher() {
 
         {/* Right Sidebar */}
         <aside className="space-y-6 lg:col-span-4">
+          <InlineChatHints hints={["Schedule earthquake drill","Send broadcast: School will close early due to heatwave","History last 3 drills"]} />
           {/* Broadcast Alerts */}
           <div id="alerts" className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <h3 className="mb-2 text-sm font-semibold">Broadcast Alerts</h3>
             <div className="grid gap-2 text-sm">
-              <select className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={target} onChange={e=>setTarget(e.target.value)}>
-                <option value="ALL">All Classes</option>
-                {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              <select className="rounded-lg border border-white/15 bg-white/15 px-3 py-2 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20" value={target} onChange={e=>setTarget(e.target.value)}>
+                <option value="ALL" className="text-slate-900">All Classes</option>
+                {classes.map(c => <option key={c.id} value={c.id} className="text-slate-900">{c.name}</option>)}
               </select>
               <textarea rows={3} placeholder="Type a message (e.g., Earthquake drill at 10:30 AM)" className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={msg} onChange={e=>setMsg(e.target.value)} />
               <button onClick={sendBroadcast} className="rounded-lg border border-red-400/40 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-300 hover:border-red-500/60 hover:bg-red-600/20 hover:text-white">Send Broadcast</button>
@@ -380,15 +387,15 @@ export default function Teacher() {
               <div className="grid gap-3 text-sm">
                 <label className="grid gap-1">
                   <span className="text-xs text-slate-300">Class</span>
-                  <select className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={drillForm.classId} onChange={e=>setDrillForm(prev=>({ ...prev, classId: e.target.value }))}>
-                    <option value="">Select a class</option>
-                    {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  <select className="rounded-lg border border-white/15 bg-white/15 px-3 py-2 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20" value={drillForm.classId} onChange={e=>setDrillForm(prev=>({ ...prev, classId: e.target.value }))}>
+                    <option value="" className="text-slate-900">Select a class</option>
+                    {classes.map(c => <option key={c.id} value={c.id} className="text-slate-900">{c.name}</option>)}
                   </select>
                 </label>
                 <label className="grid gap-1">
                   <span className="text-xs text-slate-300">Disaster Type</span>
-                  <select className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={drillForm.type} onChange={e=>setDrillForm(prev=>({ ...prev, type: e.target.value }))}>
-                    {HAZARD_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                  <select className="rounded-lg border border-white/15 bg-white/15 px-3 py-2 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20" value={drillForm.type} onChange={e=>setDrillForm(prev=>({ ...prev, type: e.target.value }))}>
+                    {HAZARD_TYPES.map(t => <option key={t} value={t} className="text-slate-900">{t}</option>)}
                   </select>
                 </label>
                 <label className="grid gap-1">
@@ -417,15 +424,15 @@ export default function Teacher() {
               <div className="grid gap-3 text-sm">
                 <label className="grid gap-1">
                   <span className="text-xs text-slate-300">Class</span>
-                  <select className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={moduleForm.classId} onChange={e=>setModuleForm(prev=>({ ...prev, classId: e.target.value }))}>
-                    <option value="">Select a class</option>
-                    {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  <select className="rounded-lg border border-white/15 bg-white/15 px-3 py-2 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20" value={moduleForm.classId} onChange={e=>setModuleForm(prev=>({ ...prev, classId: e.target.value }))}>
+                    <option value="" className="text-slate-900">Select a class</option>
+                    {classes.map(c => <option key={c.id} value={c.id} className="text-slate-900">{c.name}</option>)}
                   </select>
                 </label>
                 <label className="grid gap-1">
                   <span className="text-xs text-slate-300">Module</span>
-                  <select className="rounded-lg bg-white/10 px-3 py-2 outline-none" value={moduleForm.title} onChange={e=>setModuleForm(prev=>({ ...prev, title: e.target.value }))}>
-                    {MODULE_TITLES.map(t => <option key={t} value={t}>{t}</option>)}
+                  <select className="rounded-lg border border-white/15 bg-white/15 px-3 py-2 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20" value={moduleForm.title} onChange={e=>setModuleForm(prev=>({ ...prev, title: e.target.value }))}>
+                    {MODULE_TITLES.map(t => <option key={t} value={t} className="text-slate-900">{t}</option>)}
                   </select>
                 </label>
                 <label className="grid gap-1">
