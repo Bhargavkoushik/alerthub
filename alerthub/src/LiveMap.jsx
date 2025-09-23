@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -70,13 +71,17 @@ function getSourceFromUrl() {
 }
 
 async function fetchSource(src, controller) {
+  // Add cache-busting query to avoid stale caches
+  const ts = Date.now()
   if (src === 'sample') {
-    const res = await fetch(SAMPLE_URL, { signal: controller.signal, headers: { Accept: 'application/json' } })
+    const res = await fetch(`${SAMPLE_URL}?t=${ts}`,
+      { signal: controller.signal, headers: { Accept: 'application/json' }, cache: 'no-store' })
     if (!res.ok) throw new Error(`Sample ${res.status}`)
     return res.json()
   }
   // default gdacs
-  const res = await fetch(GDACS_URL, { signal: controller.signal, headers: { Accept: 'application/json' } })
+  const res = await fetch(`${GDACS_URL}?_=${ts}`,
+    { signal: controller.signal, headers: { Accept: 'application/json' }, cache: 'no-store' })
   if (!res.ok) throw new Error(`GDACS ${res.status}`)
   return res.json()
 }
@@ -85,6 +90,8 @@ function useDisasters({ withinKmOf } = {}) {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [lastUpdated, setLastUpdated] = useState(null)
+  const [tick, setTick] = useState(0)
   const sourceRef = useRef(getSourceFromUrl())
 
   useEffect(() => {
@@ -124,8 +131,10 @@ function useDisasters({ withinKmOf } = {}) {
         const filtered = withinKmOf
           ? normalized.filter((d) => haversineKm(d.lat, d.lon, withinKmOf.lat, withinKmOf.lon) <= withinKmOf.km)
           : normalized
-
-        if (mounted) setData(filtered)
+        if (mounted) {
+          setData(filtered)
+          setLastUpdated(new Date())
+        }
       } catch (e) {
         if (e.name === 'AbortError') return
         if (mounted) setError(e)
@@ -134,15 +143,17 @@ function useDisasters({ withinKmOf } = {}) {
       }
     }
     load()
-  const id = setInterval(load, 60_000) // auto-refresh every 60s
+    const id = setInterval(load, 60_000) // auto-refresh every 60s
     return () => {
       mounted = false
       controller.abort()
       clearInterval(id)
     }
-  }, [withinKmOf])
+  }, [withinKmOf, tick])
 
-  return { data, loading, error }
+  function refresh() { setTick((t) => t + 1) }
+
+  return { data, loading, error, lastUpdated, refresh }
 }
 
 function FlyTo({ center, zoom }) {
@@ -258,6 +269,17 @@ function SearchBox({ onResult, filterEnabled, setFilterEnabled }) {
   )
 }
 
+FlyTo.propTypes = {
+  center: PropTypes.arrayOf(PropTypes.number).isRequired,
+  zoom: PropTypes.number.isRequired,
+}
+
+SearchBox.propTypes = {
+  onResult: PropTypes.func.isRequired,
+  filterEnabled: PropTypes.bool.isRequired,
+  setFilterEnabled: PropTypes.func.isRequired,
+}
+
 export default function LiveMap() {
   const [center, setCenter] = useState(INITIAL_CENTER)
   const [zoom, setZoom] = useState(INITIAL_ZOOM)
@@ -271,7 +293,7 @@ export default function LiveMap() {
     return null
   }, [searchLoc, filterNearby])
 
-  const { data, loading, error } = useDisasters({ withinKmOf })
+  const { data, loading, error, lastUpdated, refresh } = useDisasters({ withinKmOf })
 
   function handleSearchResult(loc) {
     setSearchLoc(loc)
@@ -282,7 +304,23 @@ export default function LiveMap() {
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-6">
       <div className="mb-4">
-        <SearchBox onResult={handleSearchResult} filterEnabled={filterNearby} setFilterEnabled={setFilterNearby} />
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <SearchBox onResult={handleSearchResult} filterEnabled={filterNearby} setFilterEnabled={setFilterNearby} />
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={refresh}
+              disabled={loading}
+              className="h-9 rounded-md border border-neutral-700 bg-neutral-900 px-3 text-sm text-neutral-100 hover:bg-neutral-800 disabled:opacity-50"
+              title="Force refresh alerts"
+            >
+              {loading ? 'Refreshing…' : 'Refresh Alerts'}
+            </button>
+            {lastUpdated && (
+              <span className="text-xs text-neutral-400">Last updated: {lastUpdated.toLocaleTimeString()}</span>
+            )}
+          </div>
+        </div>
         <Legend />
         {selected && (
           <div className="mt-3 rounded-lg border border-neutral-800 bg-neutral-900/50 p-3 text-sm">

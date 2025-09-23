@@ -33,7 +33,7 @@ export function registerLocal({ full_name, role, password, username, email, phon
   const record = { id, full_name, role, username: username || null, email: email || null, phone: phone || null, password, extra_data, created_at }
   users.push(record)
   save(users)
-  const { password: _pw, ...safe } = record
+  const { password: _omit, ...safe } = record
   return { user: safe, token: 'local-' + id }
 }
 
@@ -48,6 +48,6 @@ export function loginLocal({ role, username, email, phone, password }) {
   })
   if (!match) throw new Error('Invalid credentials')
   if ((match.password || '') !== (password || '')) throw new Error('Invalid credentials')
-  const { password: _pw, ...safe } = match
+  const { password: _omit, ...safe } = match
   return { user: safe, token: 'local-' + match.id }
 }

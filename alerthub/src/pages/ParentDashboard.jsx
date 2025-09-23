@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { AlertTriangle, Phone, ShieldCheck, BookOpenText, CheckSquare, ListChecks, Info, Waves, Wind, Flame, Mountain, Sun, CloudLightning, ShieldAlert, CircleAlert, Medal, LifeBuoy, CalendarCheck, CheckCircle2, Calendar, Plus, Trash2, Users, FileText, Bell, Settings } from 'lucide-react'
+import { AlertTriangle, Phone, ShieldCheck, BookOpenText, CheckSquare, ListChecks, Info, Waves, Wind, Flame, Mountain, Sun, CloudLightning, ShieldAlert, CircleAlert, Medal, CalendarCheck, CheckCircle2, Calendar, Plus, Trash2, Users, Bell } from 'lucide-react'
 import FlipBookModal from './FlipBookModal.jsx'
 import { disastersData } from './disastersData'
 
@@ -358,9 +358,10 @@ export default function ParentDashboard() {
             <a className="hover:text-white/90" href="#plan">My Family Plan</a>
             <a className="hover:text-white/90" href="#student-progress">Child Progress</a>
             <a className="hover:text-white/90" href="#tools">Emergency Tools</a>
+            <a className="hover:text-white/90" href="/community">Community</a>
             <div className="ml-4 flex items-center gap-2 text-slate-200">
               <Users className="h-4 w-4 text-cyan-400" />
-              <select value={activeChild} onChange={e=>setActiveChild(Number(e.target.value))} className="rounded-md border border-white/20 bg-white/10 px-2 py-1 text-slate-100">
+              <select value={activeChild} onChange={e=>setActiveChild(Number(e.target.value))} className="rounded-md border border-white/15 bg-white/15 px-2 py-1 text-white outline-none backdrop-blur focus:border-white/30 focus:bg-white/20">
                 {children.map((c, idx) => <option key={idx} value={idx} className="text-slate-900">{c}</option>)}
               </select>
             </div>
@@ -746,10 +747,7 @@ export default function ParentDashboard() {
       {/* Flipbook Modal */}
       <FlipBookModal open={open} onClose={() => setOpen(false)} module={active} variant={active?._variant||'dosdonts'} heading={active?._heading} />
 
-      {/* AI Buddy */}
-      <button onClick={() => alert('AI Buddy coming soon')} className="fixed bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-cyan-600 px-4 py-3 text-sm font-semibold text-white shadow-lg hover:bg-cyan-700">
-        <LifeBuoy className="h-4 w-4" /> Ask the AI Buddy
-      </button>
+      {/* Removed obsolete AI Buddy button (superseded by global ChatbotWidget) */}
     </div>
   )
 }

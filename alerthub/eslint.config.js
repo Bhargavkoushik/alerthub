@@ -11,6 +11,8 @@ export default defineConfig([
     files: ['**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
+      react.configs.flat.recommended,
+      react.configs.flat['jsx-runtime'],
       reactHooks.configs['recommended-latest'],
       reactRefresh.configs.vite,
     ],
@@ -23,17 +25,13 @@ export default defineConfig([
         sourceType: 'module',
       },
     },
-    plugins: {
-      react,
-    },
-    settings: {
-      react: { version: 'detect' },
-    },
+    plugins: { react },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
       'react/prop-types': 'off',
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
     },
+    settings: { react: { version: 'detect' } },
   },
 ])
